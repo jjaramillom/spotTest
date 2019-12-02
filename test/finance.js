@@ -5,9 +5,9 @@ const apr = require('../shared/finance').calculateApr
 const irr = require('../shared/finance').calculateIrr
 
 
-const testFilesPath = (path.resolve(__dirname, '../test/testObjects')) //location of JSON test files
+const testFilePath = (path.resolve(__dirname, '../test/testObjects/test.json'))
 
-const readFile = (fileName) => { return JSON.parse(fs.readFileSync(testFilesPath + `/${fileName}`)) }
+const testData = JSON.parse(fs.readFileSync(testFilePath))
 
 const runCalculation = (input, method) => {
     const { principal, upfrontFee, schedule } = input
@@ -21,17 +21,20 @@ const runCalculation = (input, method) => {
 describe('Finance module', () => {
 
     describe('APR test', () => {
-        it('APR should be 48.3', () => {
-            const testData = readFile('test1.json')
-            assert.equal(runCalculation(testData.input, apr), testData.output.apr)
+        testData.forEach(dataset => {
+            it(`APR should be approx ${dataset.output.apr}`, () => {
+                assert.approximately(runCalculation(dataset.input, apr), dataset.output.apr, 0.2)
+            })
         })
     })
 
     describe('IRR test', () => {
-        it('IRR should be approx 0.033', () => {
-            const testData = readFile('test1.json')
-            assert.approximately(runCalculation(testData.input, irr), testData.output.irr, 0.001)
+        testData.forEach(dataset => {
+            it(`IRR should be approx ${dataset.output.irr}`, () => {
+                assert.approximately(runCalculation(dataset.input, irr), dataset.output.irr, 0.001)
+            })
         })
+
     })
 })
 

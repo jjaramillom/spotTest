@@ -60,13 +60,12 @@ const findRoot = (iterations, precision, lowerLimit, upperLimit, evaluator, para
  * @param {number} upfrontFee Optional extra fee charged
  * @param {Array<Date>} dates Array containing the payment dates
  * @returns {number} The APR is given as a percentage ( 0 < APR < 100). If APR = 0, it could not be calculated.
- * TODO Include dates array? If so, which date should be taken as start date.
  */
 const apr = (investment, cashFlows, upfrontFee = 0) => {
     const iterations = 1000
     const tolerance = 0.1
-    const lowerLimit = 0.001
-    const upperLimit = 0.9
+    const lowerLimit = -0.5
+    const upperLimit = 2
     const parameters = {
         investment: investment,
         cashFlows: cashFlows,
@@ -87,13 +86,12 @@ const apr = (investment, cashFlows, upfrontFee = 0) => {
  * @param {Array<number>} cashFlows Array containing the expected cash flow (interest + principal)
  * @param {number} upfrontFee Optional extra fee charged
  * @returns {number} The IRR is given as a decimal number ( 0 < IRR < 1). If IRR = 0, it could not be calculated.
- * TODO Include dates array? If so, which date should be taken as start date.
  */
 const irr = (investment, cashFlows, upfrontFee = 0) => {
     const iterations = 1000
     const tolerance = 0.1
-    const lowerLimit = 0.001
-    const upperLimit = 0.9
+    const lowerLimit = -0.5
+    const upperLimit = 2
     const parameters = {
         investment: investment,
         cashFlows: cashFlows,

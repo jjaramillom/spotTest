@@ -3,8 +3,16 @@ var router = express.Router();
 
 const finance = require('../shared/finance')
 
-/* GET home page. */
-router.post('/calculate', function (req, res, next) {
+router.get('/', (req, res) => {
+
+  return res.status(200).send({
+    msg: 'server is running'
+  })
+
+})
+
+
+router.post('/calculate', (req, res) => {
   const { principal, upfrontFee, schedule } = req.body
 
   const payments = schedule.map(payment => {

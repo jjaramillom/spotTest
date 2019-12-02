@@ -4,7 +4,6 @@
  * @param {Array<number>} cashFlows Value invested. Should be positive
  * @param {number} interest
  * @param {number} upfrontFee Optional extra fee charged and payed in period 0
- * TODO Include dates array? If so, which date should be taken as start date.
  */
 const aprEquation = ({ investment, cashFlows, interest, upfrontFee = 0 }) => {
     return - investment + upfrontFee + cashFlows.reduce((accumulated, cashFlow, index) => {
@@ -18,7 +17,6 @@ const aprEquation = ({ investment, cashFlows, interest, upfrontFee = 0 }) => {
  * @param {Array<number>} cashFlows Value invested. Should be positive
  * @param {number} interest
  * @param {number} upfrontFee Optional extra fee charged and payed in period 0
- * TODO Include dates array? If so, which date should be taken as start date.
  */
 const npv = ({ investment, cashFlows, interest, upfrontFee = 0 }) => {
     return -investment + upfrontFee + cashFlows.reduce((accumulated, cashFlow, index) => {
@@ -35,7 +33,7 @@ const npv = ({ investment, cashFlows, interest, upfrontFee = 0 }) => {
  * @param {Function} evaluator Function of which the root is to be found
  * @param {JSON} parameters (constant) parameters to pass to the evaluator function (except the independent variable)
  */
-const find_root = (iterations, precision, lowerLimit, upperLimit, evaluator, parameters) => {
+const findRoot = (iterations, precision, lowerLimit, upperLimit, evaluator, parameters) => {
     const indVar = (upperLimit + lowerLimit) / 2 //Independent variable. (variable to variate to find the root of the evaluator function)
     const evalParams = { ...parameters, interest: indVar }
 
@@ -76,7 +74,7 @@ const apr = (investment, cashFlows, upfrontFee = 0) => {
     }
 
     try {
-        const apr = find_root(iterations, tolerance, lowerLimit, upperLimit, aprEquation, parameters)
+        const apr = findRoot(iterations, tolerance, lowerLimit, upperLimit, aprEquation, parameters)
         return Math.round(apr * 1000) / 10
     } catch (error) {
         return 0
@@ -103,12 +101,12 @@ const irr = (investment, cashFlows, upfrontFee = 0) => {
     }
 
     try {
-        const irr = find_root(iterations, tolerance, lowerLimit, upperLimit, npv, parameters)
+        const irr = findRoot(iterations, tolerance, lowerLimit, upperLimit, npv, parameters)
         return Math.round(irr * 1e10) / 1e10
     } catch (error) {
         return 0
     }
 }
 
-exports.calculate_apr = apr
-exports.calculate_irr = irr
+exports.calculateApr = apr
+exports.calculateIrr = irr
